@@ -1,0 +1,51 @@
+// writing gravity as a force 2b applied 2 every mass:
+Vector2 gravity = new Vector2(0, 9.81);
+
+for(Body body : bodies) {body.force = body.force.add(gravity.multiply(body.mass));}
+
+
+// collision detection:
+distance < length(posA - posB)
+
+if distance < radiusA + radiusB
+    collision detected
+    // handle collision
+    impulse = -(1 + restitution) * relativeVelocity
+
+
+// Game Loop:
+
+while(true) {
+    double dt = 1.0 / 60.0;
+
+    infinity.step(dt);
+
+    render();
+}
+
+
+// PseudoCode:
+
+world.step(dt):
+
+    applyForces()
+
+    integrateVelocity(dt)
+
+    detectCollisions()
+
+    resolveCollisions()
+
+    integratePosition(dt)
+
+
+２０２６年３が多雨１６日：
+double lastTime = System.nanoTime();
+while (running) {
+    double now = System.nanoTime();
+    double dt = (now - lastTime) / 1e9; // Time elapsed in seconds
+    lastTime = now;
+
+    // Update simulation
+    infinity.step(dt);
+}

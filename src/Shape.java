@@ -1,4 +1,3 @@
-package PACKAGE_NAME;
-
-public class Shape {
+abstract class Shape { // defines collision geometry
+    abstract boolean checkCollision(Shape other);
 }

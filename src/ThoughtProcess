@@ -1,0 +1,48 @@
+２０２６年３月１４：
+First I need to create a simple domain in which to simulate the functions. This domain will be called Infinity (Satorou Gojo)
+
+I will also need a vector class in which to call all throughout the for several functions:
+    1) to model things like position, velocity, acceleration, etc
+    2) handle basic math functions
+
+Then I will create an object class (not the mother class) which will hold of the masses (bodies) that I will be controlling.
+This body class will handle more advance math operations like integration
+
+
+*gravity could be a vector:
+    a force vector with only a vertical component of magnitude 9.81:
+        Vector2 gravity = new Vector2(0, 9.81);
+
+        for(Body body : bodies) {body.force = body.force.add(gravity.multiply(body.mass));}
+
+As for how to add collision detection:
+    simple circle collision logic:
+        distance < length(posA - posB)
+
+        if distance < radiusA + radiusB
+            collision detected
+            // handle collision
+            impulse = -(1 + restitution) * relativeVelocity
+
+
+Advanced Features to add later:
+1) body rotation
+2) angular velocity
+3) friction
+4) constraints
+5) springs
+6) continuous collisiion detection
+7) broadphase algs like quadtrees and BVH
+
+
+When handling collisions I need to account for the shape of the object because the
+distance of the surface of the object from its center will not always be uniform (like a circle)
+Thus i will need something to track this.
+
+
+How do I apply impulse?
+
+２０２６年３月１６日：
+I realized my Vector 2 class needs more Vectore operation functions like Dot and Cross Product as well as a Normalize Function
+as well as more basic ones like subtract
+

@@ -1,4 +1,7 @@
-package PACKAGE_NAME;
+public class Contact { // stores collision data
+    Body a;
+    Body b;
 
-public class Contact {
+    Vector2 normal; // the direction objects should separate
+    double penetration;
 }
