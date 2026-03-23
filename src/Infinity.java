@@ -16,20 +16,24 @@ public class Infinity {
 
         // run physics steps
         while (accumulator >= timestep) {
-            // perf 1 sim step
+            // apply forces
             for (Body body : bodies) {
                 body.force = body.force.add(gravity.multiply(body.mass));
-                // add other forces like friction, etc
+
+            }
+
+            for (Body body : bodies) {
                 body.integrate(timestep);
             }
 
+            // collision detection and resolution
             collisionDetector.detectCollision(bodies); // Handle collisions
 
             accumulator -= timestep; // decrease the accumulator by timestep
         }
     }
 
-
+    public List<Body> getBodies() {return bodies;}
 
     public void addBody(Body body) {bodies.add(body);}
 }

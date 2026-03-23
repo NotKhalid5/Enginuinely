@@ -8,20 +8,24 @@ public class CollisionDetector {
                 Body a = bodies.get(i);
                 Body b = bodies.get(j);
 
-                if (a instanceof Circle && b instanceof Circle) { // Only check collision between circles
-                    detectCircleCollision((Circle) a, (Circle) b);
+                // only check collision b/w 2 circles
+                if (a.shape instanceof Circle && b.shape instanceof Circle) { // Only check collision between circles
+                    detectCircleCollision(a, b);
                 }
             }
         }
     }
 
     // Circle-to-circle collision detection
-    private void detectCircleCollision(Circle a, Circle b) {
+    private void detectCircleCollision(Body a, Body b) {
+        Circle ca = (Circle) a.shape;
+        Circle cb = (Circle) b.shape;
+
         double dx = a.position.x - b.position.x;
         double dy = a.position.y - b.position.y;
 
-        double distance = Math.sqrt(dx * dx + dy * dy); // Distance between the centers
-        double radiusSum = a.radius + b.radius; // Sum of radii
+        double distance = Math.sqrt(dx * dx + dy * dy); // Distance between the centers using distance formula
+        double radiusSum = ca.radius + cb.radius; // Sum of radii
 
         // Check if the circles are colliding (i.e., distance < sum of radii)
         if (distance < radiusSum) {
@@ -30,17 +34,30 @@ public class CollisionDetector {
     }
 
     // Method to resolve circle-to-circle collision
-    private void resolveCircleCollision(Circle a, Circle b, double distance, double radiusSum) {
+    private void resolveCircleCollision(Body a, Body b, double distance, double radiusSum) {
+        //prevent divide by 0
+        if (distance == 0) distance = 0.0001;
+
         // Calculate the collision normal (unit vector from one circle to the other)
-        Vector2 normal = new Vector2(b.position.x - a.position.x, b.position.y - a.position.y).normalize();
+        Vector2 normal = new Vector2(
+                b.position.x - a.position.x,
+                b.position.y - a.position.y
+        ).normalize();
 
         // Calculate the penetration depth (how much the circles overlap)
         double overlap = radiusSum - distance;
 
-        // Move circles apart along the collision normal
-        Vector2 separation = normal.multiply(overlap / 2);
-        a.position = a.position.subtract(separation);
-        b.position = b.position.add(separation);
+
+        // Move circles apart along the collision normal (Separate bodies)
+        double percent = 0.8; // correction strength
+        double slop = 0.01;   // ignore tiny overlaps
+
+        double correctionMag = Math.max(overlap - slop, 0) / (1 / a.mass + 1 / b.mass) * percent;
+
+        Vector2 correction = normal.multiply(correctionMag);
+
+        a.position = a.position.subtract(correction.multiply(1 / a.mass));
+        b.position = b.position.add(correction.multiply(1 / b.mass));
 
         // Apply impulses to resolve velocities (simple elastic collision model)
         // Calculate relative velocity in the direction of the normal
@@ -51,10 +68,10 @@ public class CollisionDetector {
         if (velocityAlongNormal > 0) return; // No need to resolve if they are separating
 
         // Coefficient of restitution (elasticity) - 1.0 for perfectly elastic, less for inelastic
-        double el = 0.8;
+        double resititution = 0.8;
 
         // Calculate impulse scalar
-        double impulse = -(1 + el) * velocityAlongNormal / (1 / a.mass + 1 / b.mass);
+        double impulse = -(1 + resititution) * velocityAlongNormal / (1 / a.mass + 1 / b.mass);
 
         // Apply the impulse to the velocities
         Vector2 impulseVector = normal.multiply(impulse);

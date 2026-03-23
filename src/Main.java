@@ -1,53 +1,56 @@
+import javax.swing.*;
+import java.util.ArrayList;
+
 public class Main {
-    public static void main(String [] args) {
-        // System.out.println("Testing testing");
-
-        // Body Creation Test Bench:
-        // Create a Body object with specific position, velocity, and mass
-        Vector2 position = new Vector2(0, 10);   // Body starts at position (0, 10)
-        Vector2 velocity = new Vector2(2, 0);    // Body has a velocity of 2 units in the x-direction
-        double mass = 5.0;                       // The mass of the body is 5 kg
-
-        Body body = new Body(position, velocity, mass);
-
-        // Apply a force (e.g., gravity or any other external force)
-        Vector2 gravity = new Vector2(0, -9.81);  // Force due to gravity (in m/s^2)
-        body.applyForce(gravity.multiply(body.mass));  // Apply the force
-
-        // Integrate the body over a small time step (e.g., 1 second)
-        double dt = 1.0; // Time step of 1 second
-        body.integrate(dt);
-
-        // Print the body's new position and velocity after integration
-        System.out.println("New Position: (" + body.position.x + ", " + body.position.y + ")");
-        System.out.println("New Velocity: (" + body.velocity.x + ", " + body.velocity.y + ")");
-
-
-
-        // Initialize simulation:
-        Infinity infinity = new Infinity();
-
+    public static void main(String[] args) {
+        // create bodies 4 sim
+        // 1st body
         Body body1 = new Body();
-        body1.position = new Vector2(0, 10);
-        body1.velocity = new Vector2(0, 0);
+        body1.position = new Vector2(0,0);
+        body1.velocity = new Vector2(2,0);
         body1.mass = 1.0;
-        body1.radius = 1.0;
+        body1.shape = new Circle(20.0);
 
+        // 2nd body
+        Body body2 = new Body();
+        body2.position = new Vector2(50,0);
+        body2.velocity = new Vector2(-2,0);
+        body2.mass = 1.0;
+        body2.shape = new Circle(20.0);
+
+        // Add bodies 2 sim
+        Infinity infinity = new Infinity();
         infinity.addBody(body1);
+        infinity.addBody(body2);
+
+
+        // Create and  set up JFrame Window
+        JFrame frame = new JFrame("Physics Simulation");
+        Renderer renderer = new Renderer(infinity.getBodies());
+
+        frame.setDefaultCloseOperation((JFrame.EXIT_ON_CLOSE));
+        frame.getContentPane().add(renderer);
+        frame.pack();
+        frame.setVisible(true);
 
         double lastTime = System.nanoTime();
-        while (true) {
+
+        // simulation loop
+        while(true) {
             double now = System.nanoTime();
-            double dt = (now - lastTime) / 1e9; // Time elapsed in seconds
+            double dt = (now -lastTime) / 1e9; // time step n secs
             lastTime = now;
 
-            // Update simulation w/ dt
-            infinity.step(dt);
+            infinity.step(dt); // step sim forward
+
+            // Debug output
+            System.out.println("Body1: (" + body1.position.x + ", " + body1.position.y + ")");
+            System.out.println("Body2: (" + body2.position.x + ", " + body2.position.y + ")");
 
             try {
                 Thread.sleep(16);
-            } catch (InterruptedException ie) {
-                ie.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
     }

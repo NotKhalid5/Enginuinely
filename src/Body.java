@@ -7,6 +7,8 @@ public class Body {
     public Vector2 force; // net force applied to body (Newtons)
     public double mass; // mass of body n kilograms
 
+    public Shape shape; // allows us 2 attach the geometry of the body and determine handling
+
     // Default no-arg constr.
     public Body () {
         this.position = new Vector2(0,0); // Default position at origin
@@ -16,16 +18,21 @@ public class Body {
     }
 
     // Constructor w/ fields to initialize a Body w/ position, velocity, and mass
-    public Body(Vector2 position, Vector2 velocity, double mass) {
+    public Body(Vector2 position, Vector2 velocity, double mass, Shape shape) {
         this.position = position; // initialize position w/ provided Vector2
         this.velocity = velocity; // initialize velocity w/ provided Vector2
         this.force = new Vector2(0,0); // initial force is zero
         this.mass = mass; // set mass of the body
+        this.shape = shape; // set the geometry
     }
 
     public void integrate(double dt) {
         Vector2 acceleration = force.divide(mass); // F = ma => a = F/m (used vector operations defined in Vector2 class)
+
+        //update velocity
         velocity = velocity.add(acceleration.multiply(dt)); // update velocity
+
+        //update position
         position = position.add(velocity.multiply(dt)); // update position
 
         // reset net force after each step

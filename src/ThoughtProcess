@@ -46,3 +46,7 @@ How do I apply impulse?
 I realized my Vector 2 class needs more Vectore operation functions like Dot and Cross Product as well as a Normalize Function
 as well as more basic ones like subtract
 
+２０２６年３月２２日
+velocity += acceleration * deltaTime
+position += velocity * deltaTime
+
