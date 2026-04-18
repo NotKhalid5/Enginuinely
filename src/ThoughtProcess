@@ -50,3 +50,14 @@ as well as more basic ones like subtract
 velocity += acceleration * deltaTime
 position += velocity * deltaTime
 
+２０２６年３月２３日
+Implementing More Advance (More Accurate) Integration Methods
+
+Verlet Integration:
+newPosition = 2 * currentPosition - previousPosition + acceleration * timestep^2;
+
+Runge-Kutta (4th Order) Integration:
+family of methods for solving differential equations. often used as a balance b/w accuracy and computational efficiency
+
+２０２６年３月２５日
+I now want to make it so I can drag the objects

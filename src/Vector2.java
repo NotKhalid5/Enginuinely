@@ -24,7 +24,7 @@ public class Vector2 {
     // ================================================================
 
     public double dot(Vector2 v) {return this.x * v.x + this.y * v.y;}
-
+    // cross product
     public Vector2 normalize() {
         double length = Math.sqrt(this.x * this.x + this.y * this.y);
         return new Vector2(this.x / length, this.y / length);
